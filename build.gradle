@@ -14,6 +14,10 @@ dependencies {
     implementation 'org.knowm.xchart:xchart:3.6.6'
 }
 
+shadowJar {
+    minimize()
+}
+
 sourceCompatibility = '11'
 targetCompatibility = '11'
 
