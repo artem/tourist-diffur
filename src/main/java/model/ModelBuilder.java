@@ -71,6 +71,4 @@ public class ModelBuilder {
         }
         return pointsContainer;
     }
-
-
 }

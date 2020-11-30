@@ -1,3 +1,5 @@
+import model.ModelBuilder;
+import model.PointsContainer;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
@@ -9,13 +11,12 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 import java.util.*;
 
 public class Demo {
-    private final List<Integer> xAges = new ArrayList<>();
-    private final List<Integer> yPercentile75th = new ArrayList<>();
     private final Random rand = new Random();
     private final XYChart xyChart;
-    private int counter;
+    private final PointsContainer data;
 
     public Demo() {
+        data = new ModelBuilder(5_000_000_000L, 1, 0.0005f, 1f, 0.5f).build();
         xyChart = getChart();
     }
 
@@ -38,7 +39,7 @@ public class Demo {
                 };
 
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(chartUpdaterTask, 0, 100);
+        //timer.scheduleAtFixedRate(chartUpdaterTask, 0, 100);
     }
 
     public XYChart getChart() {
@@ -48,8 +49,8 @@ public class Demo {
                         .width(800)
                         .height(600)
                         .title(getClass().getSimpleName())
-                        .xAxisTitle("Age")
-                        .yAxisTitle("Amount")
+                        .xAxisTitle("Duration")
+                        .yAxisTitle("People")
                         .build();
 
         // Customize Chart
@@ -60,15 +61,17 @@ public class Demo {
         chart.getStyler().setPlotMargin(0);
         chart.getStyler().setPlotContentSize(.95);
 
-        xAges.add(counter++);
-        yPercentile75th.add(3234);
         // Series
-        chart.addSeries("75th Percentile", xAges, yPercentile75th).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("Variable I", data.getX(), data.getI()).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("Variable S", data.getX(), data.getS()).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("Variable R", data.getX(), data.getR()).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("Variable D", data.getX(), data.getD()).setMarker(SeriesMarkers.NONE);
 
         return chart;
     }
 
     public void updateData() {
+        /*
         xAges.add(counter++);
         yPercentile75th.add(Math.abs(rand.nextInt()) % 42069);
         if (xAges.size() > 20) {
@@ -76,5 +79,6 @@ public class Demo {
             yPercentile75th.remove(0);
         }
         xyChart.updateXYSeries("75th Percentile", xAges, yPercentile75th, null);
+         */
     }
 }
