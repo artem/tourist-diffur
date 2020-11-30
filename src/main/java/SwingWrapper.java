@@ -1,10 +1,8 @@
-import java.awt.GridLayout;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.internal.chartpart.Chart;
@@ -22,6 +20,7 @@ public class SwingWrapper<T extends Chart<?, ?>> {
     private List<T> charts = new ArrayList<T>();
     private int numRows;
     private int numColumns;
+    private JPanel controlPanel = new JPanel();
 
     /**
      * Constructor
@@ -68,9 +67,22 @@ public class SwingWrapper<T extends Chart<?, ?>> {
             javax.swing.SwingUtilities.invokeAndWait(
                     () -> {
                         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                        frame.setLayout(new GridBagLayout());
+
+                        GridBagConstraints constraints = new GridBagConstraints();
+                        constraints.fill = GridBagConstraints.NONE;
+
+                        showEventDemo();
+                        frame.add(controlPanel, constraints);
+
+                        constraints.fill = GridBagConstraints.BOTH;
+                        constraints.weightx = 1;
+                        constraints.weighty = 1;
+
                         XChartPanel<T> chartPanel = new XChartPanel<T>(charts.get(0));
                         chartPanels.add(chartPanel);
-                        frame.add(chartPanel);
+                        frame.add(chartPanel, constraints);
+
 
                         // Display the window.
                         frame.pack();
@@ -180,5 +192,23 @@ public class SwingWrapper<T extends Chart<?, ?>> {
     public SwingWrapper<T> setTitle(String windowTitle) {
         this.windowTitle = windowTitle;
         return this;
+    }
+
+    private void showEventDemo(){
+        JButton okButton = new JButton("OK");
+        JButton submitButton = new JButton("Submit");
+        JButton cancelButton = new JButton("Cancel");
+
+        okButton.setActionCommand("OK");
+        submitButton.setActionCommand("Submit");
+        cancelButton.setActionCommand("Cancel");
+
+        //okButton.addActionListener(new ButtonClickListener());
+        //submitButton.addActionListener(new ButtonClickListener());
+        //cancelButton.addActionListener(new ButtonClickListener());
+
+        controlPanel.add(okButton);
+        controlPanel.add(submitButton);
+        controlPanel.add(cancelButton);
     }
 }
