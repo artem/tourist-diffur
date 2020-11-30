@@ -28,11 +28,11 @@ public class PointsContainer {
 
     private void incCapacity() {
         if (size == this.x.length) {
-            float[] newX = new float[this.x.length + (this.x.length / 2)];
-            float[] newI = new float[this.x.length + (this.x.length / 2)];
-            float[] newS = new float[this.x.length + (this.x.length / 2)];
-            float[] newR = new float[this.x.length + (this.x.length / 2)];
-            float[] newD = new float[this.x.length + (this.x.length / 2)];
+            float[] newX = new float[size + 1];
+            float[] newI = new float[size + 1];
+            float[] newS = new float[size + 1];
+            float[] newR = new float[size + 1];
+            float[] newD = new float[size + 1];
             System.arraycopy(this.x,0, newX, 0, size);
             System.arraycopy(this.i, 0, newI, 0, size);
             System.arraycopy(this.r, 0, newR, 0, size);

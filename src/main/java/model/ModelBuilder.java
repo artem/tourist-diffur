@@ -21,7 +21,10 @@ public class ModelBuilder {
         this.r = 0;
         this.alpha = alpha;
         this.beta = beta;
-        this.DELTA = (float)Math.log(Math.abs(Math.log(Math.abs(Math.log((double) n)))));
+        // We don't actually care about dynamic delta
+        // Plotter scales the data according to the windows size
+        // Settle with 1 since 0.5 introduces jitter
+        this.DELTA = 1;
     }
 
     private float evaluateDifS(float s, float i, float r, float alpha, float beta) {
