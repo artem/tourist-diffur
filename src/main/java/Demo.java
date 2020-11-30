@@ -25,7 +25,7 @@ public class Demo {
     }
 
     private void run() {
-        final SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(xyChart);
+        final SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(xyChart).setTitle("Tourist-diffur");
         swingWrapper.displayChart();
 
         TimerTask chartUpdaterTask =
@@ -45,11 +45,9 @@ public class Demo {
         // Create Chart
         XYChart chart =
                 new XYChartBuilder()
-                        .width(800)
-                        .height(600)
-                        .title(getClass().getSimpleName())
-                        .xAxisTitle("Duration")
-                        .yAxisTitle("People")
+                        .title("Визуализация заболевших")
+                        .xAxisTitle("Продолжительность")
+                        .yAxisTitle("Население")
                         .build();
 
         // Customize Chart
