@@ -1,7 +1,6 @@
 package model;
 
 public class PointsContainer {
-    float[] x;
     float[] i;
     float[] s;
     float[] r;
@@ -9,7 +8,6 @@ public class PointsContainer {
     int size;
 
     public PointsContainer(int size) {
-        this.x = new float[size];
         this.i = new float[size];
         this.s = new float[size];
         this.r = new float[size];
@@ -18,7 +16,6 @@ public class PointsContainer {
 
     public void addCoordinates(float x, float s, float i, float r, float d) {
         incCapacity();
-        this.x[size] = x;
         this.i[size] = i;
         this.s[size] = s;
         this.r[size] = r;
@@ -27,18 +24,15 @@ public class PointsContainer {
     }
 
     private void incCapacity() {
-        if (size == this.x.length) {
-            float[] newX = new float[size + 1];
+        if (size == this.i.length) {
             float[] newI = new float[size + 1];
             float[] newS = new float[size + 1];
             float[] newR = new float[size + 1];
             float[] newD = new float[size + 1];
-            System.arraycopy(this.x,0, newX, 0, size);
             System.arraycopy(this.i, 0, newI, 0, size);
             System.arraycopy(this.r, 0, newR, 0, size);
             System.arraycopy(this.s, 0, newS, 0, size);
             System.arraycopy(this.d, 0, newD, 0, size);
-            this.x = newX;
             this.i = newI;
             this.r = newR;
             this.s = newS;
@@ -47,7 +41,7 @@ public class PointsContainer {
     }
 
     public float[] getX() {
-        return x;
+        return null;
     }
 
     public float[] getI() {
