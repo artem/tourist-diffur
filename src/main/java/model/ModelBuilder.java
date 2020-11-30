@@ -53,10 +53,10 @@ public class ModelBuilder {
 
 
     public PointsContainer build() {
-        PointsContainer pointsContainer = new PointsContainer(20);
+        PointsContainer pointsContainer = new PointsContainer(TOTAL_DAYS);
         float x = 0;
-        pointsContainer.addCoordinates(x, s, i, r, d);
-        while (x <= TOTAL_DAYS) {
+        while (x < TOTAL_DAYS) {
+            pointsContainer.addCoordinates(x, s, i, r, d);
             float difS = evaluateDifS(s, i, r, alpha, beta);
             float difI = evaluateDifI(s, i, r, alpha, beta);
             float difR = evaluateDifR(s, i, r, alpha, beta);
@@ -70,7 +70,6 @@ public class ModelBuilder {
                 break;
             }
             x += DELTA;
-            pointsContainer.addCoordinates(x, s, i, r, d);
         }
         return pointsContainer;
     }
