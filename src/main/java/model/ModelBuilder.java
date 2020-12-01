@@ -1,84 +1,147 @@
 package model;
 
+import java.util.Collections;
+import java.util.List;
+
 public class ModelBuilder {
-    private double s;
-    private long i;
-    //private double r;
-    private double d;
-    private long PEOPLE_AMOUNT;
+
+    // dynamic parameters
+    private List<ParameterPair> alphaList;
+    private List<ParameterPair> betaList;
+    private List<ParameterPair> muList;
+
     private double alpha;
     private double beta;
     private double mu;
+    private int alphaPosition = 0;
+    private int betaPosition = 0;
+    private int muPosition = 0;
+
     private final double DELTA;
-    private final int TOTAL_DAYS = 365;
+    private int totalDays = 365;
+    private long peopleAmount = 10;
 
 
-    public ModelBuilder(long n, long i, double alpha, double beta, double mu) {
-        if (n < i) {
-            throw new IllegalStateException("n < i");
+    // for alpha beta mu dynamic changing
+    public static class ParameterPair implements Comparable<ParameterPair> {
+        private long time;
+        private double value;
+
+        public ParameterPair(long time, double value) {
+            this.time = time;
+            this.value = value;
         }
 
-        this.PEOPLE_AMOUNT = n;
-        this.i = i;
-        this.mu = mu;
-        s = n - i;
+        public long getTime() {
+            return time;
+        }
+
+        public double getValue() {
+            return value;
+        }
+
+        public void setTime(long time) {
+            this.time = time;
+        }
+
+        public void setValue(double value) {
+            this.value = value;
+        }
+
+        @Override
+        public int compareTo(ParameterPair parameterPair) {
+            return (time > parameterPair.getTime() ? 1 : -1);
+        }
+    }
+
+    public ModelBuilder(long peopleAmount) {
+        this.peopleAmount = peopleAmount;
         //this.r = 0;
-        this.alpha = alpha;
-        this.beta = beta;
+        //this.alpha = alpha;
+        //this.beta = beta;
         // We don't actually care about dynamic delta
         // Plotter scales the data according to the windows size
         // Settle with 1 since 0.5 introduces jitter
         this.DELTA = 1;
     }
 
-    public ModelBuilder setN(long n) {
-        if (n < i) {
-            throw new IllegalStateException("n < i");
-        }
-        this.PEOPLE_AMOUNT = n;
-        s = n - i;
-
-        return this;
+    // Set and sort by time
+    public void setAlphaList(List<ParameterPair> alphaList) {
+        this.alphaList = alphaList;
+        alphaPosition = -1;
+        Collections.sort(this.alphaList);
     }
 
-    public ModelBuilder setI(long i) {
-        if (PEOPLE_AMOUNT < i) {
-            throw new IllegalStateException("n < i");
-        }
-        this.i = i;
-        s = PEOPLE_AMOUNT - i;
-
-        return this;
+    public void setBetaList(List<ParameterPair> betaList) {
+        this.betaList = betaList;
+        betaPosition = -1;
+        Collections.sort(this.betaList);
     }
 
-    public ModelBuilder setAlpha(double alpha) {
-        this.alpha = alpha;
-
-        return this;
+    public void setMuList(List<ParameterPair> muList) {
+        this.muList = muList;
+        muPosition = -1;
+        Collections.sort(this.muList);
     }
 
-    public ModelBuilder setBeta(double beta) {
-        this.beta = beta;
-
-        return this;
+    private boolean hasNextAlpha() {
+        return (alphaPosition + 1 < alphaList.size());
     }
 
-    public ModelBuilder setMu(double mu) {
-        this.mu = mu;
+    private boolean hasNextBeta() {
+        return (betaPosition + 1 < betaList.size());
+    }
 
-        return this;
+    private boolean hasNextMu() {
+        return (muPosition + 1 < muList.size());
+    }
+
+    //Not move the pointer
+    private ParameterPair peekNextAlpha() {
+        assert(alphaPosition + 1 < alphaList.size());
+        return alphaList.get(alphaPosition + 1);
+    }
+
+    private ParameterPair peekNextBeta() {
+        assert(betaPosition + 1 < betaList.size());
+        return betaList.get(betaPosition + 1);
+    }
+
+    private ParameterPair peekNextMu() {
+        assert(muPosition + 1 < muList.size());
+        return muList.get(muPosition + 1);
+    }
+
+    //Move the pointer
+    private ParameterPair moveNextAlpha() {
+        assert(alphaPosition + 1 < alphaList.size());
+        alphaPosition++;
+        return alphaList.get(alphaPosition);
+    }
+
+    private ParameterPair moveNextBeta() {
+        assert(betaPosition + 1 < betaList.size());
+        betaPosition++;
+        return betaList.get(betaPosition);
+    }
+
+    private ParameterPair moveNextMu() {
+        assert(muPosition + 1 < muList.size());
+        muPosition++;
+        return muList.get(muPosition);
+
     }
 
     private double evaluateDifS(double s, double i, double r, double alpha, double beta) {
-        return -1 * beta * s * i / PEOPLE_AMOUNT;
+        return -1 * beta * s * i / peopleAmount;
     }
 
     private double evaluateDifI(double s, double i, double r, double alpha, double beta) {
-        return beta * s * i / PEOPLE_AMOUNT - alpha * i;
+        return beta * s * i / peopleAmount - alpha * i;
     }
 
     private double evaluateDifR(double s, double i, double r, double alpha, double beta) {
-        return alpha * i / PEOPLE_AMOUNT;
+        return alpha * i / peopleAmount;
     }
 
     private double evaluateDifD(double r, double mu) {
@@ -89,22 +152,49 @@ public class ModelBuilder {
         return (delta * dif + func < 0 ? 0 : delta * dif + func);
     }
 
-    private boolean equal(double r) {
-        return  ((double) PEOPLE_AMOUNT - r < Math.log(Math.log(PEOPLE_AMOUNT)));
+    private void changeParameterByTime(double curTime) {
+        if (hasNextAlpha()) {
+            ParameterPair parameterPair = peekNextAlpha();
+            if (curTime >= parameterPair.getTime()) {
+                alpha = moveNextAlpha().getValue();
+            }
+        }
+        if (hasNextBeta()) {
+            ParameterPair parameterPair = peekNextBeta();
+            if (curTime >= parameterPair.getTime()) {
+                beta = moveNextBeta().getValue();
+            }
+        }
+        if (hasNextMu()) {
+            ParameterPair parameterPair = peekNextMu();
+            if (curTime >= parameterPair.getTime()) {
+                mu = moveNextMu().getValue();
+            }
+        }
+    }
+
+    public void setTotalDays(int totalDays) {
+        this.totalDays = totalDays;
+    }
+
+    public void setPeopleAmount(long peopleAmount) {
+        this.peopleAmount = peopleAmount;
     }
 
 
     public PointsContainer build() {
-        PointsContainer pointsContainer = new PointsContainer(TOTAL_DAYS);
+        PointsContainer pointsContainer = new PointsContainer();
+        assert(alphaList != null && alphaList.size() > 0);
+        assert(betaList != null && betaList.size() > 0);
+        assert(muList != null && muList.size() > 0);
         double x = 0;
-
         double r = 0;
-        double i = this.i;
-        double s = this.s;
-        double d = this.d;
-
-        while (x < TOTAL_DAYS) {
-            pointsContainer.addCoordinates(x, s, i, r, d);
+        double i = 1;
+        double d = 0;
+        double s = peopleAmount - i;
+        while (x < totalDays) {
+            changeParameterByTime(x);
+            pointsContainer.addCoordinates(s, i, r, d, x);
             double difS = evaluateDifS(s, i, r, alpha, beta);
             double difI = evaluateDifI(s, i, r, alpha, beta);
             double difR = evaluateDifR(s, i, r, alpha, beta);
@@ -113,8 +203,8 @@ public class ModelBuilder {
             i = evaluateFunction(DELTA, difI, i);
             r = evaluateFunction(DELTA, difR, r);
             d = evaluateFunction(DELTA, difD, d);
-            if (r >= PEOPLE_AMOUNT || d >= PEOPLE_AMOUNT) {
-                pointsContainer.addCoordinates(x, 0, 0, PEOPLE_AMOUNT, d);
+            if (r >= peopleAmount || d >= peopleAmount) {
+                pointsContainer.addCoordinates(0, 0, peopleAmount, d, x);
                 break;
             }
             x += DELTA;
