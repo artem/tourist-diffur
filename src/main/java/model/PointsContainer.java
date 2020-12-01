@@ -1,63 +1,51 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PointsContainer {
-    double[] i;
-    double[] s;
-    double[] r;
-    double[] d;
+    List<Double> i;
+    List<Double> s;
+    List<Double> r;
+    List<Double> d;
+    List<Double> x;
     int size;
 
-    public PointsContainer(int size) {
-        this.i = new double[size];
-        this.s = new double[size];
-        this.r = new double[size];
-        this.d = new double[size];
+    public PointsContainer() {
+        this.i = new ArrayList<>();
+        this.s = new ArrayList<>();
+        this.r = new ArrayList<>();
+        this.d = new ArrayList<>();
+        this.x = new ArrayList<>();
     }
 
-    public void addCoordinates(double x, double s, double i, double r, double d) {
-        incCapacity();
-        this.i[size] = i;
-        this.s[size] = s;
-        this.r[size] = r;
-        this.d[size] = d;
+    public void addCoordinates(double s, double i, double r, double d, double x) {
+        this.s.add(s);
+        this.i.add(i);
+        this.r.add(r);
+        this.d.add(d);
+        this.x.add(x);
         size++;
     }
 
-    private void incCapacity() {
-        if (size == this.i.length) {
-            double[] newI = new double[size + 1];
-            double[] newS = new double[size + 1];
-            double[] newR = new double[size + 1];
-            double[] newD = new double[size + 1];
-            System.arraycopy(this.i, 0, newI, 0, size);
-            System.arraycopy(this.r, 0, newR, 0, size);
-            System.arraycopy(this.s, 0, newS, 0, size);
-            System.arraycopy(this.d, 0, newD, 0, size);
-            this.i = newI;
-            this.r = newR;
-            this.s = newS;
-            this.d = newD;
-        }
-    }
-
-    public double[] getX() {
-        return null;
-    }
-
-    public double[] getI() {
+    public List<Double> getI() {
         return i;
     }
 
-    public double[] getS() {
+    public List<Double> getS() {
         return s;
     }
 
-    public double[] getR() {
+    public List<Double> getR() {
         return r;
     }
 
-    public double[] getD() {
+    public List<Double> getD() {
         return d;
+    }
+
+    public List<Double> getX() {
+        return x;
     }
 
     public int getSize() {
