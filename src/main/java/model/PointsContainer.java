@@ -1,24 +1,21 @@
 package model;
 
 public class PointsContainer {
-    float[] x;
-    float[] i;
-    float[] s;
-    float[] r;
-    float[] d;
+    double[] i;
+    double[] s;
+    double[] r;
+    double[] d;
     int size;
 
     public PointsContainer(int size) {
-        this.x = new float[size];
-        this.i = new float[size];
-        this.s = new float[size];
-        this.r = new float[size];
-        this.d = new float[size];
+        this.i = new double[size];
+        this.s = new double[size];
+        this.r = new double[size];
+        this.d = new double[size];
     }
 
-    public void addCoordinates(float x, float s, float i, float r, float d) {
+    public void addCoordinates(double x, double s, double i, double r, double d) {
         incCapacity();
-        this.x[size] = x;
         this.i[size] = i;
         this.s[size] = s;
         this.r[size] = r;
@@ -27,18 +24,15 @@ public class PointsContainer {
     }
 
     private void incCapacity() {
-        if (size == this.x.length) {
-            float[] newX = new float[this.x.length + (this.x.length / 2)];
-            float[] newI = new float[this.x.length + (this.x.length / 2)];
-            float[] newS = new float[this.x.length + (this.x.length / 2)];
-            float[] newR = new float[this.x.length + (this.x.length / 2)];
-            float[] newD = new float[this.x.length + (this.x.length / 2)];
-            System.arraycopy(this.x,0, newX, 0, size);
+        if (size == this.i.length) {
+            double[] newI = new double[size + 1];
+            double[] newS = new double[size + 1];
+            double[] newR = new double[size + 1];
+            double[] newD = new double[size + 1];
             System.arraycopy(this.i, 0, newI, 0, size);
             System.arraycopy(this.r, 0, newR, 0, size);
             System.arraycopy(this.s, 0, newS, 0, size);
             System.arraycopy(this.d, 0, newD, 0, size);
-            this.x = newX;
             this.i = newI;
             this.r = newR;
             this.s = newS;
@@ -46,23 +40,23 @@ public class PointsContainer {
         }
     }
 
-    public float[] getX() {
-        return x;
+    public double[] getX() {
+        return null;
     }
 
-    public float[] getI() {
+    public double[] getI() {
         return i;
     }
 
-    public float[] getS() {
+    public double[] getS() {
         return s;
     }
 
-    public float[] getR() {
+    public double[] getR() {
         return r;
     }
 
-    public float[] getD() {
+    public double[] getD() {
         return d;
     }
 
