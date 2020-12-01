@@ -27,20 +27,12 @@ public class DataMutator {
         JSpinner spinN = new JSpinner(nModel);
         ((JSpinner.NumberEditor) spinN.getEditor()).getTextField().setColumns(10);
         spinN.addChangeListener(e -> {
-            modelBuilder.setN((Long) spinN.getValue());
+            modelBuilder.setPeopleAmount((Long) spinN.getValue());
             iModel.setMaximum((Long) spinN.getValue());
         });
         controlPanel.add(spinN, constraints);
 
-        JSpinner spinInfected = new JSpinner(iModel);
-        ((JSpinner.NumberEditor) spinInfected.getEditor()).getTextField().setColumns(10);
-        spinInfected.addChangeListener(e -> {
-            modelBuilder.setI((Long) spinInfected.getValue());
-            nModel.setMinimum((Long) spinInfected.getValue());
-        });
-        controlPanel.add(spinInfected, constraints);
-
-        JSpinner spinAlpha = new JSpinner(new SpinnerNumberModel(0.0005, 0, 100, 0.00005f));
+        /*JSpinner spinAlpha = new JSpinner(new SpinnerNumberModel(0.0005, 0, 100, 0.00005f));
         spinAlpha.setEditor(new JSpinner.NumberEditor(spinAlpha, "0.00000"));
         ((JSpinner.NumberEditor) spinAlpha.getEditor()).getTextField().setColumns(10);
         spinAlpha.addChangeListener(e -> modelBuilder.setAlpha((Double) spinAlpha.getValue()));
@@ -56,7 +48,7 @@ public class DataMutator {
         spinMu.setEditor(new JSpinner.NumberEditor(spinMu, "0.00000"));
         ((JSpinner.NumberEditor) spinMu.getEditor()).getTextField().setColumns(10);
         spinMu.addChangeListener(e -> modelBuilder.setMu((Double) spinMu.getValue()));
-        controlPanel.add(spinMu, constraints);
+        controlPanel.add(spinMu, constraints);*/
     }
 
     public void updateData() {

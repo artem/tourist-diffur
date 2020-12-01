@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,8 +58,9 @@ public class ModelBuilder {
     public ModelBuilder(long peopleAmount) {
         this.peopleAmount = peopleAmount;
         //this.r = 0;
-        //this.alpha = alpha;
-        //this.beta = beta;
+        this.alphaList = List.of();
+        this.betaList = List.of();
+        this.muList = List.of();
         // We don't actually care about dynamic delta
         // Plotter scales the data according to the windows size
         // Settle with 1 since 0.5 introduces jitter
