@@ -12,36 +12,36 @@ import java.util.*;
 public class Demo {
     private final Random rand = new Random();
     private final XYChart xyChart;
-    private final PointsContainer data;
 
-    public Demo() {
-        data = new ModelBuilder(5_000_000_000L, 1, 0.0005f, 1f, 0.5f).build();
-        xyChart = getChart();
+    public Demo(ModelBuilder modelBuilder) {
+        xyChart = getChart(modelBuilder);
     }
 
     public static void main(String[] args) {
-        Demo exampleChart = new Demo();
-        exampleChart.run();
+        ModelBuilder modelBuilder = new ModelBuilder(70_000L, 1, 0.0005f, 1f, 0.5f);
+        Demo exampleChart = new Demo(modelBuilder);
+        exampleChart.run(modelBuilder);
     }
 
-    private void run() {
-        final SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(xyChart).setTitle("Tourist-diffur");
+    private void run(ModelBuilder data) {
+        final DataMutator ctrl = new DataMutator(xyChart, data);
+        final SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(xyChart, ctrl).setTitle("Tourist-diffur");
         swingWrapper.displayChart();
 
         TimerTask chartUpdaterTask =
                 new TimerTask() {
                     @Override
                     public void run() {
-                        updateData();
+                        ctrl.updateData();
                         javax.swing.SwingUtilities.invokeLater(swingWrapper::repaintChart);
                     }
                 };
 
         Timer timer = new Timer();
-        //timer.scheduleAtFixedRate(chartUpdaterTask, 0, 100);
+        timer.scheduleAtFixedRate(chartUpdaterTask, 0, 1000);
     }
 
-    public XYChart getChart() {
+    public XYChart getChart(ModelBuilder modelBuilder) {
         // Create Chart
         XYChart chart =
                 new XYChartBuilder()
@@ -58,6 +58,8 @@ public class Demo {
         chart.getStyler().setPlotMargin(0);
         chart.getStyler().setPlotContentSize(.95);
 
+        PointsContainer data = modelBuilder.build();
+
         // Series
         chart.addSeries("Variable I", data.getX(), data.getI()).setMarker(SeriesMarkers.NONE);
         chart.addSeries("Variable S", data.getX(), data.getS()).setMarker(SeriesMarkers.NONE);
@@ -67,15 +69,5 @@ public class Demo {
         return chart;
     }
 
-    public void updateData() {
-        /*
-        xAges.add(counter++);
-        yPercentile75th.add(Math.abs(rand.nextInt()) % 42069);
-        if (xAges.size() > 20) {
-            xAges.remove(0);
-            yPercentile75th.remove(0);
-        }
-        xyChart.updateXYSeries("75th Percentile", xAges, yPercentile75th, null);
-         */
-    }
+
 }

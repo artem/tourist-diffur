@@ -20,14 +20,16 @@ public class SwingWrapper<T extends Chart<?, ?>> {
     private List<T> charts = new ArrayList<T>();
     private int numRows;
     private int numColumns;
-    private JPanel controlPanel = new JPanel();
+    private final DataMutator ctrl;
 
     /**
      * Constructor
      *
      * @param chart
+     * @param ctrl
      */
-    public SwingWrapper(T chart) {
+    public SwingWrapper(T chart, DataMutator ctrl) {
+        this.ctrl = ctrl;
         this.charts.add(chart);
     }
 
@@ -35,25 +37,28 @@ public class SwingWrapper<T extends Chart<?, ?>> {
      * Constructor - The number of rows and columns will be calculated automatically Constructor
      *
      * @param charts
+     * @param ctrl
      */
-    public SwingWrapper(List<T> charts) {
+    public SwingWrapper(List<T> charts, DataMutator ctrl) {
         this.charts = charts;
 
         this.numRows = (int) (Math.sqrt(charts.size()) + .5);
         this.numColumns = (int) ((double) charts.size() / this.numRows + 1);
+        this.ctrl = ctrl;
     }
 
     /**
      * Constructor
-     *
-     * @param charts
+     *  @param charts
      * @param numRows - the number of rows
      * @param numColumns - the number of columns
+     * @param ctrl
      */
-    public SwingWrapper(List<T> charts, int numRows, int numColumns) {
+    public SwingWrapper(List<T> charts, int numRows, int numColumns, DataMutator ctrl) {
         this.charts = charts;
         this.numRows = numRows;
         this.numColumns = numColumns;
+        this.ctrl = ctrl;
     }
 
     /** Display the chart in a Swing JFrame */
@@ -72,8 +77,7 @@ public class SwingWrapper<T extends Chart<?, ?>> {
                         GridBagConstraints constraints = new GridBagConstraints();
                         constraints.fill = GridBagConstraints.NONE;
 
-                        showEventDemo();
-                        frame.add(controlPanel, constraints);
+                        frame.add(ctrl.getControlPanel(), constraints);
 
                         constraints.fill = GridBagConstraints.BOTH;
                         constraints.weightx = 1;
@@ -192,23 +196,5 @@ public class SwingWrapper<T extends Chart<?, ?>> {
     public SwingWrapper<T> setTitle(String windowTitle) {
         this.windowTitle = windowTitle;
         return this;
-    }
-
-    private void showEventDemo(){
-        JButton okButton = new JButton("OK");
-        JButton submitButton = new JButton("Submit");
-        JButton cancelButton = new JButton("Cancel");
-
-        okButton.setActionCommand("OK");
-        submitButton.setActionCommand("Submit");
-        cancelButton.setActionCommand("Cancel");
-
-        //okButton.addActionListener(new ButtonClickListener());
-        //submitButton.addActionListener(new ButtonClickListener());
-        //cancelButton.addActionListener(new ButtonClickListener());
-
-        controlPanel.add(okButton);
-        controlPanel.add(submitButton);
-        controlPanel.add(cancelButton);
     }
 }
