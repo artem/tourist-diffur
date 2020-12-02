@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class ModelBuilder {
 
@@ -183,12 +184,51 @@ public class ModelBuilder {
         this.peopleAmount = peopleAmount;
     }
 
+    public boolean parse(String s) {
+        StringTokenizer st = new StringTokenizer(s);
+        List<ParameterPair> a = new ArrayList<>();
+        List<ParameterPair> b = new ArrayList<>();
+        List<ParameterPair> mu = new ArrayList<>();
+
+        while (st.countTokens() >= 3) {
+            String coeff = st.nextToken();
+            ParameterPair pair;
+            try {
+                pair = new ParameterPair(Integer.parseInt(st.nextToken()), Double.parseDouble(st.nextToken()));
+            } catch (Exception e) {
+                return false;
+            }
+
+            switch (coeff) {
+                case "a":
+                    a.add(pair);
+                    break;
+                case "b":
+                    b.add(pair);
+                    break;
+                case "m":
+                case "mu":
+                    mu.add(pair);
+                    break;
+                default:
+                    return false;
+            }
+        }
+        setAlphaList(a);
+        setBetaList(b);
+        setMuList(mu);
+
+        return true;
+    }
 
     public PointsContainer build() {
         PointsContainer pointsContainer = new PointsContainer();
         assert(alphaList != null && alphaList.size() > 0);
         assert(betaList != null && betaList.size() > 0);
         assert(muList != null && muList.size() > 0);
+        alphaPosition = -1;
+        betaPosition = -1;
+        muPosition = -1;
         double x = 0;
         double r = 0;
         double i = 1;

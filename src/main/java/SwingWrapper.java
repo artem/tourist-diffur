@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.internal.chartpart.Chart;
@@ -72,21 +75,11 @@ public class SwingWrapper<T extends Chart<?, ?>> {
             javax.swing.SwingUtilities.invokeAndWait(
                     () -> {
                         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                        frame.setLayout(new GridBagLayout());
-
-                        GridBagConstraints constraints = new GridBagConstraints();
-                        constraints.fill = GridBagConstraints.NONE;
-
-                        frame.add(ctrl.getControlPanel(), constraints);
-
-                        constraints.fill = GridBagConstraints.BOTH;
-                        constraints.weightx = 1;
-                        constraints.weighty = 1;
+                        frame.add(ctrl.getControlPanel(), BorderLayout.WEST);
 
                         XChartPanel<T> chartPanel = new XChartPanel<T>(charts.get(0));
                         chartPanels.add(chartPanel);
-                        frame.add(chartPanel, constraints);
-
+                        frame.add(chartPanel);
 
                         // Display the window.
                         frame.pack();
