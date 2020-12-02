@@ -1,7 +1,9 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class ModelBuilder {
 
@@ -57,8 +59,9 @@ public class ModelBuilder {
     public ModelBuilder(long peopleAmount) {
         this.peopleAmount = peopleAmount;
         //this.r = 0;
-        //this.alpha = alpha;
-        //this.beta = beta;
+        this.alphaList = List.of();
+        this.betaList = List.of();
+        this.muList = List.of();
         // We don't actually care about dynamic delta
         // Plotter scales the data according to the windows size
         // Settle with 1 since 0.5 introduces jitter
@@ -179,14 +182,53 @@ public class ModelBuilder {
 
     public void setPeopleAmount(long peopleAmount) {
         this.peopleAmount = peopleAmount;
-    }
 
+    }
+    public boolean parse(String s) {
+        StringTokenizer st = new StringTokenizer(s);
+        List<ParameterPair> b = new ArrayList<>();
+        List<ParameterPair> a = new ArrayList<>();
+        List<ParameterPair> mu = new ArrayList<>();
+
+            String coeff = st.nextToken();
+            ParameterPair pair;
+        while (st.countTokens() >= 3) {
+            try {
+                pair = new ParameterPair(Integer.parseInt(st.nextToken()), Double.parseDouble(st.nextToken()));
+                return false;
+            } catch (Exception e) {
+            }
+
+                case "a":
+            switch (coeff) {
+                    a.add(pair);
+                case "b":
+                    break;
+                    break;
+                    b.add(pair);
+                case "m":
+                    mu.add(pair);
+                case "mu":
+                    break;
+                default:
+            }
+                    return false;
+        setAlphaList(a);
+        setBetaList(b);
+        setMuList(mu);
+        }
+
+        return true;
+    }
 
     public PointsContainer build() {
         PointsContainer pointsContainer = new PointsContainer();
         assert(alphaList != null && alphaList.size() > 0);
         assert(betaList != null && betaList.size() > 0);
         assert(muList != null && muList.size() > 0);
+        alphaPosition = -1;
+        betaPosition = -1;
+        muPosition = -1;
         double x = 0;
         double r = 0;
         double i = 1;

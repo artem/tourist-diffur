@@ -10,7 +10,6 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 import java.util.*;
 
 public class Demo {
-    private final Random rand = new Random();
     private final XYChart xyChart;
 
     public Demo(ModelBuilder modelBuilder) {
@@ -18,7 +17,7 @@ public class Demo {
     }
 
     public static void main(String[] args) {
-        ModelBuilder modelBuilder = new ModelBuilder(70_000L, 1, 0.0005f, 1f, 0.5f);
+        ModelBuilder modelBuilder = new ModelBuilder(70_000L);
         Demo exampleChart = new Demo(modelBuilder);
         exampleChart.run(modelBuilder);
     }
