@@ -144,12 +144,16 @@ public class ModelBuilder {
     }
 
     private double evaluateDifR(double s, double i, double r, double alpha, double beta) {
-        return alpha * i / peopleAmount;
+        return alpha * i;
     }
 
     private double evaluateDifD(double r, double mu) {
-        return mu * r;
+        return mu  * r;
     }
+
+    /* private double evaluateDifAlive(double r, double mu) {
+        return (1 - mu) * r;
+    } */
 
     private double evaluateFunction(double delta, double dif, double func) {
         return (delta * dif + func < 0 ? 0 : delta * dif + func);
@@ -182,41 +186,41 @@ public class ModelBuilder {
 
     public void setPeopleAmount(long peopleAmount) {
         this.peopleAmount = peopleAmount;
-
     }
+
     public boolean parse(String s) {
         StringTokenizer st = new StringTokenizer(s);
-        List<ParameterPair> b = new ArrayList<>();
         List<ParameterPair> a = new ArrayList<>();
+        List<ParameterPair> b = new ArrayList<>();
         List<ParameterPair> mu = new ArrayList<>();
 
+        while (st.countTokens() >= 3) {
             String coeff = st.nextToken();
             ParameterPair pair;
-        while (st.countTokens() >= 3) {
             try {
                 pair = new ParameterPair(Integer.parseInt(st.nextToken()), Double.parseDouble(st.nextToken()));
-                return false;
             } catch (Exception e) {
+                return false;
             }
 
-                case "a":
             switch (coeff) {
+                case "a":
                     a.add(pair);
+                    break;
                 case "b":
-                    break;
-                    break;
                     b.add(pair);
+                    break;
                 case "m":
-                    mu.add(pair);
                 case "mu":
+                    mu.add(pair);
                     break;
                 default:
-            }
                     return false;
+            }
+        }
         setAlphaList(a);
         setBetaList(b);
         setMuList(mu);
-        }
 
         return true;
     }
@@ -233,6 +237,7 @@ public class ModelBuilder {
         double r = 0;
         double i = 1;
         double d = 0;
+        double a = 0;
         double s = peopleAmount - i;
         while (x < totalDays) {
             changeParameterByTime(x);
@@ -241,14 +246,28 @@ public class ModelBuilder {
             double difI = evaluateDifI(s, i, r, alpha, beta);
             double difR = evaluateDifR(s, i, r, alpha, beta);
             double difD = evaluateDifD(r, mu);
+            //double difA = evaluateDifAlive(r, mu);
             s = evaluateFunction(DELTA, difS, s);
             i = evaluateFunction(DELTA, difI, i);
             r = evaluateFunction(DELTA, difR, r);
             d = evaluateFunction(DELTA, difD, d);
-            if (r >= peopleAmount || d >= peopleAmount) {
-                pointsContainer.addCoordinates(0, 0, peopleAmount, d, x);
-                break;
+            //a = evaluateFunction(DELTA, difA, a);
+            if (i >= peopleAmount) {
+                i = peopleAmount;
             }
+            if (r >= peopleAmount) {
+                r = peopleAmount;
+            }
+            if (s >= peopleAmount) {
+                s = peopleAmount;
+            }
+            /* if (a >= r) {
+                a = r;
+            } */
+            if (d >= r) {
+                d = r;
+            }
+
             x += DELTA;
         }
         return pointsContainer;
