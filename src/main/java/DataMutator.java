@@ -3,11 +3,13 @@ import model.PointsContainer;
 import org.knowm.xchart.XYChart;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class DataMutator {
     private final JPanel controlPanel = new JPanel();
     private final XYChart xyChart;
     private final ModelBuilder modelBuilder;
+    private SwingWrapper<?> parent;
 
     public DataMutator(XYChart xyChart, ModelBuilder modelBuilder) {
         this.xyChart = xyChart;
@@ -15,8 +17,12 @@ public class DataMutator {
         composePanel();
     }
 
+    public void setParent(SwingWrapper<?> parent) {
+        this.parent = parent;
+    }
+
     private void composePanel() {
-        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
 
         SpinnerNumberModel nModel = new SpinnerNumberModel(Long.valueOf(70_000L), Long.valueOf(1), Long.valueOf(18_000_000_000L), Long.valueOf(100));
 
@@ -26,31 +32,43 @@ public class DataMutator {
         });
         //hack
         spinN.setMaximumSize(spinN.getPreferredSize());
-        controlPanel.add(new JLabel("Population:"));
+        JLabel popLabel = new JLabel("Population");
+        popLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        controlPanel.add(popLabel);
         controlPanel.add(spinN);
 
         String cont = "a 0 0.00001\nb 0 0.1\nm 0 0.01";
         // hack
         modelBuilder.parse(cont);
+        updateData();
         JTextArea textArea = new JTextArea(cont);
         JScrollPane jsp = new JScrollPane(textArea);
-        controlPanel.add(new JLabel("Parameters"));
+        JLabel parLabel = new JLabel("Parameters");
+        parLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        controlPanel.add(parLabel);
         controlPanel.add(jsp);
 
         JLabel result = new JLabel("");
+        result.setAlignmentX(Component.CENTER_ALIGNMENT);
         JButton btn = new JButton("Parse!");
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.addActionListener(e -> {
             String value = textArea.getText();
             boolean res = modelBuilder.parse(value);
             if (res) {
                 result.setText("Success!");
-                //TODO smart redraw
+                redraw();
             } else {
                 result.setText("Invalid input!");
             }
         });
         controlPanel.add(btn);
         controlPanel.add(result);
+    }
+
+    private void redraw() {
+        updateData();
+        javax.swing.SwingUtilities.invokeLater(parent::repaintChart);
     }
 
     public void updateData() {

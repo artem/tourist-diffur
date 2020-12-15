@@ -25,19 +25,8 @@ public class Demo {
     private void run(ModelBuilder data) {
         final DataMutator ctrl = new DataMutator(xyChart, data);
         final SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(xyChart, ctrl).setTitle("SIRD");
+        ctrl.setParent(swingWrapper);
         swingWrapper.displayChart();
-
-        TimerTask chartUpdaterTask =
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        ctrl.updateData();
-                        javax.swing.SwingUtilities.invokeLater(swingWrapper::repaintChart);
-                    }
-                };
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(chartUpdaterTask, 0, 1000);
     }
 
     public XYChart getChart(ModelBuilder modelBuilder) {
