@@ -26,7 +26,7 @@ public class DataMutator {
         });
         //hack
         spinN.setMaximumSize(spinN.getPreferredSize());
-        controlPanel.add(new JLabel("Население:"));
+        controlPanel.add(new JLabel("Population:"));
         controlPanel.add(spinN);
 
         String cont = "a 0 0.00001\nb 0 0.1\nm 0 0.01";
@@ -34,7 +34,7 @@ public class DataMutator {
         modelBuilder.parse(cont);
         JTextArea textArea = new JTextArea(cont);
         JScrollPane jsp = new JScrollPane(textArea);
-        controlPanel.add(new JLabel("Коэффиценты"));
+        controlPanel.add(new JLabel("Parameters"));
         controlPanel.add(jsp);
 
         JLabel result = new JLabel("");
@@ -55,10 +55,10 @@ public class DataMutator {
 
     public void updateData() {
         PointsContainer data = modelBuilder.build();
-        xyChart.updateXYSeries("Variable I", null, data.getI(), null);
-        xyChart.updateXYSeries("Variable S", null, data.getS(), null);
-        xyChart.updateXYSeries("Variable R", null, data.getR(), null);
-        xyChart.updateXYSeries("Variable D", null, data.getD(), null);
+        xyChart.updateXYSeries("I (infectious)", null, data.getI(), null);
+        xyChart.updateXYSeries("S (susceptible)", null, data.getS(), null);
+        xyChart.updateXYSeries("R (recovered)", null, data.getR(), null);
+        xyChart.updateXYSeries("D (deceased)", null, data.getD(), null);
     }
 
     public JPanel getControlPanel() {
