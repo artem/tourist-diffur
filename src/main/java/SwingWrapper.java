@@ -68,6 +68,10 @@ public class SwingWrapper<T extends Chart<?, ?>> {
     public JFrame displayChart() {
         // Create and set up the window.
         final JFrame frame = new JFrame(windowTitle);
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 365*3, 365);
+        ctrl.setupSlider(slider);
+        final JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
 
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
@@ -79,7 +83,12 @@ public class SwingWrapper<T extends Chart<?, ?>> {
 
                         XChartPanel<T> chartPanel = new XChartPanel<T>(charts.get(0));
                         chartPanels.add(chartPanel);
-                        frame.add(chartPanel);
+                        rightPanel.add(chartPanel);
+                        JLabel sliderLabel = new JLabel("Days to visualize", JLabel.CENTER);
+                        sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                        rightPanel.add(sliderLabel);
+                        rightPanel.add(slider);
+                        frame.add(rightPanel);
 
                         // Display the window.
                         frame.pack();

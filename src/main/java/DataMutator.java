@@ -21,6 +21,17 @@ public class DataMutator {
         this.parent = parent;
     }
 
+    public void setupSlider(JSlider slider) {
+        slider.addChangeListener(e -> {
+            modelBuilder.setTotalDays(slider.getValue());
+            redraw();
+        });
+        slider.setMajorTickSpacing(60);
+        slider.setMinorTickSpacing(20);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+    }
+
     private void composePanel() {
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
 
