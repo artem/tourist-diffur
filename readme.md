@@ -5,7 +5,7 @@
 - **I** - the number of **i**nfectious individuals
 - **R** - the number of **r**ecovered (and immune) individuals
 - **D** - the number of **d**eceased individuals
-###Parameters
+### Parameters
 - **alpha** (**a**) - is the average number of recovered individuals per time or **rate of recovery**
 - **beta** (**b**) - is the average number of contacts per person per time or **rate of infection**
 - **mu** (**m**) - is the average number of deceased individuals per time or **rate of mortality**
