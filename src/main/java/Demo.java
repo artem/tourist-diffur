@@ -7,8 +7,6 @@ import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.Styler.LegendPosition;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
-import java.util.*;
-
 public class Demo {
     private final XYChart xyChart;
 

@@ -7,46 +7,20 @@ import java.util.StringTokenizer;
 
 public class ModelBuilder {
 
+    private final double DELTA = 1;
     // dynamic parameters
     private List<ParameterPair> alphaList;
     private List<ParameterPair> betaList;
     private List<ParameterPair> muList;
-
     private double alpha;
     private double beta;
     private double mu;
     private int alphaPosition = 0;
     private int betaPosition = 0;
     private int muPosition = 0;
-
-    private final double DELTA = 1;
     private int totalDays = 365;
     private long peopleAmount;
 
-
-    // for alpha beta mu dynamic changing
-    public static class ParameterPair implements Comparable<ParameterPair> {
-        private final long time;
-        private final double value;
-
-        public ParameterPair(long time, double value) {
-            this.time = time;
-            this.value = value;
-        }
-
-        public long getTime() {
-            return time;
-        }
-
-        public double getValue() {
-            return value;
-        }
-
-        @Override
-        public int compareTo(ParameterPair parameterPair) {
-            return (time > parameterPair.getTime() ? 1 : -1);
-        }
-    }
 
     public ModelBuilder(long peopleAmount) {
         this.peopleAmount = peopleAmount;
@@ -89,35 +63,35 @@ public class ModelBuilder {
 
     //Not move the pointer
     private ParameterPair peekNextAlpha() {
-        assert(alphaPosition + 1 < alphaList.size());
+        assert (alphaPosition + 1 < alphaList.size());
         return alphaList.get(alphaPosition + 1);
     }
 
     private ParameterPair peekNextBeta() {
-        assert(betaPosition + 1 < betaList.size());
+        assert (betaPosition + 1 < betaList.size());
         return betaList.get(betaPosition + 1);
     }
 
     private ParameterPair peekNextMu() {
-        assert(muPosition + 1 < muList.size());
+        assert (muPosition + 1 < muList.size());
         return muList.get(muPosition + 1);
     }
 
     //Move the pointer
     private ParameterPair moveNextAlpha() {
-        assert(alphaPosition + 1 < alphaList.size());
+        assert (alphaPosition + 1 < alphaList.size());
         alphaPosition++;
         return alphaList.get(alphaPosition);
     }
 
     private ParameterPair moveNextBeta() {
-        assert(betaPosition + 1 < betaList.size());
+        assert (betaPosition + 1 < betaList.size());
         betaPosition++;
         return betaList.get(betaPosition);
     }
 
     private ParameterPair moveNextMu() {
-        assert(muPosition + 1 < muList.size());
+        assert (muPosition + 1 < muList.size());
         muPosition++;
         return muList.get(muPosition);
 
@@ -136,16 +110,16 @@ public class ModelBuilder {
     }
 
     private double evaluateDifD(double r, double i, double mu) {
-        return mu  * i;
+        return mu * i;
+    }
+
+    private double evaluateFunction(double delta, double dif, double func) {
+        return (delta * dif + func < 0 ? 0 : delta * dif + func);
     }
 
     /* private double evaluateDifAlive(double r, double mu) {
         return (1 - mu) * r;
     } */
-
-    private double evaluateFunction(double delta, double dif, double func) {
-        return (delta * dif + func < 0 ? 0 : delta * dif + func);
-    }
 
     private void changeParameterByTime(double curTime) {
         if (hasNextAlpha()) {
@@ -215,9 +189,9 @@ public class ModelBuilder {
 
     public PointsContainer build() {
         PointsContainer pointsContainer = new PointsContainer();
-        assert(alphaList != null && alphaList.size() > 0);
-        assert(betaList != null && betaList.size() > 0);
-        assert(muList != null && muList.size() > 0);
+        assert (alphaList != null && alphaList.size() > 0);
+        assert (betaList != null && betaList.size() > 0);
+        assert (muList != null && muList.size() > 0);
         alphaPosition = -1;
         betaPosition = -1;
         muPosition = -1;
@@ -227,7 +201,7 @@ public class ModelBuilder {
         double d = 0;
         double a = 0;
         double s = peopleAmount - i;
-       //System.out.println(peopleAmount);
+        //System.out.println(peopleAmount);
         while (x < totalDays) {
             changeParameterByTime(x);
             pointsContainer.addCoordinates(s, i, r, d, x);
@@ -262,5 +236,29 @@ public class ModelBuilder {
             x += DELTA;
         }
         return pointsContainer;
+    }
+
+    // for alpha beta mu dynamic changing
+    public static class ParameterPair implements Comparable<ParameterPair> {
+        private final long time;
+        private final double value;
+
+        public ParameterPair(long time, double value) {
+            this.time = time;
+            this.value = value;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public double getValue() {
+            return value;
+        }
+
+        @Override
+        public int compareTo(ParameterPair parameterPair) {
+            return (time > parameterPair.getTime() ? 1 : -1);
+        }
     }
 }

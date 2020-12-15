@@ -1,14 +1,11 @@
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.internal.chartpart.Chart;
+
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import org.knowm.xchart.XChartPanel;
-import org.knowm.xchart.internal.chartpart.Chart;
 
 /**
  * A convenience class used to display a Chart in a barebones Swing application
@@ -18,12 +15,12 @@ import org.knowm.xchart.internal.chartpart.Chart;
 public class SwingWrapper<T extends Chart<?, ?>> {
 
     private final List<XChartPanel<T>> chartPanels = new ArrayList<>();
+    private final DataMutator ctrl;
     private String windowTitle = "XChart";
     private boolean isCentered = true;
     private List<T> charts = new ArrayList<T>();
     private int numRows;
     private int numColumns;
-    private final DataMutator ctrl;
 
     /**
      * Constructor
@@ -52,8 +49,9 @@ public class SwingWrapper<T extends Chart<?, ?>> {
 
     /**
      * Constructor
-     *  @param charts
-     * @param numRows - the number of rows
+     *
+     * @param charts
+     * @param numRows    - the number of rows
      * @param numColumns - the number of columns
      * @param ctrl
      */
@@ -64,11 +62,13 @@ public class SwingWrapper<T extends Chart<?, ?>> {
         this.ctrl = ctrl;
     }
 
-    /** Display the chart in a Swing JFrame */
+    /**
+     * Display the chart in a Swing JFrame
+     */
     public JFrame displayChart() {
         // Create and set up the window.
         final JFrame frame = new JFrame(windowTitle);
-        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 365*3, 365);
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 365 * 3, 365);
         ctrl.setupSlider(slider);
         final JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
@@ -106,7 +106,9 @@ public class SwingWrapper<T extends Chart<?, ?>> {
         return frame;
     }
 
-    /** Display the chart in a Swing JFrame */
+    /**
+     * Display the chart in a Swing JFrame
+     */
     public JFrame displayChartMatrix() {
         // Create and set up the window.
         final JFrame frame = new JFrame(windowTitle);
