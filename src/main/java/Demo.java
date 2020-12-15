@@ -24,7 +24,7 @@ public class Demo {
 
     private void run(ModelBuilder data) {
         final DataMutator ctrl = new DataMutator(xyChart, data);
-        final SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(xyChart, ctrl).setTitle("Tourist-diffur");
+        final SwingWrapper<XYChart> swingWrapper = new SwingWrapper<>(xyChart, ctrl).setTitle("SIRD");
         swingWrapper.displayChart();
 
         TimerTask chartUpdaterTask =
@@ -44,9 +44,9 @@ public class Demo {
         // Create Chart
         XYChart chart =
                 new XYChartBuilder()
-                        .title("Визуализация заболевших")
-                        .xAxisTitle("Продолжительность")
-                        .yAxisTitle("Население")
+                        .title("Infection spread")
+                        .xAxisTitle("Time (in days)")
+                        .yAxisTitle("Population")
                         .build();
 
         // Customize Chart
@@ -60,10 +60,10 @@ public class Demo {
         PointsContainer data = modelBuilder.build();
 
         // Series
-        chart.addSeries("Variable I", data.getX(), data.getI()).setMarker(SeriesMarkers.NONE);
-        chart.addSeries("Variable S", data.getX(), data.getS()).setMarker(SeriesMarkers.NONE);
-        chart.addSeries("Variable R", data.getX(), data.getR()).setMarker(SeriesMarkers.NONE);
-        chart.addSeries("Variable D", data.getX(), data.getD()).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("I (infectious)", data.getX(), data.getI()).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("S (susceptible)", data.getX(), data.getS()).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("R (recovered)", data.getX(), data.getR()).setMarker(SeriesMarkers.NONE);
+        chart.addSeries("D (deceased)", data.getX(), data.getD()).setMarker(SeriesMarkers.NONE);
 
         return chart;
     }

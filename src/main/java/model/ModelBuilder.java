@@ -140,15 +140,15 @@ public class ModelBuilder {
     }
 
     private double evaluateDifI(double s, double i, double r, double alpha, double beta) {
-        return beta * s * i / peopleAmount - alpha * i;
+        return beta * s * i / peopleAmount - alpha * i - mu * i;
     }
 
     private double evaluateDifR(double s, double i, double r, double alpha, double beta) {
         return alpha * i;
     }
 
-    private double evaluateDifD(double r, double mu) {
-        return mu  * r;
+    private double evaluateDifD(double r, double i, double mu) {
+        return mu  * i;
     }
 
     /* private double evaluateDifAlive(double r, double mu) {
@@ -239,17 +239,24 @@ public class ModelBuilder {
         double d = 0;
         double a = 0;
         double s = peopleAmount - i;
+       //System.out.println(peopleAmount);
         while (x < totalDays) {
             changeParameterByTime(x);
             pointsContainer.addCoordinates(s, i, r, d, x);
             double difS = evaluateDifS(s, i, r, alpha, beta);
             double difI = evaluateDifI(s, i, r, alpha, beta);
             double difR = evaluateDifR(s, i, r, alpha, beta);
-            double difD = evaluateDifD(r, mu);
+            double difD = evaluateDifD(r, i, mu);
             //double difA = evaluateDifAlive(r, mu);
             s = evaluateFunction(DELTA, difS, s);
             i = evaluateFunction(DELTA, difI, i);
+            //a 0 0
+            //b 0 0.275
+            //m 0 0
             r = evaluateFunction(DELTA, difR, r);
+
+            //System.out.println("i " + x + " " + i);
+            //System.out.println("r " + x + " " + r);
             d = evaluateFunction(DELTA, difD, d);
             //a = evaluateFunction(DELTA, difA, a);
             if (i >= peopleAmount) {
@@ -261,13 +268,9 @@ public class ModelBuilder {
             if (s >= peopleAmount) {
                 s = peopleAmount;
             }
-            /* if (a >= r) {
-                a = r;
-            } */
-            if (d >= r) {
-                d = r;
+            if (d >= peopleAmount) {
+                d = peopleAmount;
             }
-
             x += DELTA;
         }
         return pointsContainer;
