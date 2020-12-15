@@ -26,9 +26,9 @@ population 25 million, 6th march first covid infected
 - cameroon households have an average of 5 members
 - from Wednesday 18 March 2020 air and sea borders were closed. Some other restrictions. Source: https://www.spm.gov.cm/site/?q=en/content/government-response-strategy-coronavirus-pandemic-covid-19
 - On 10 April, the government took 7 additional measures to stop the spread of COVID-19 in Cameroon. These measures take effect from Monday, 13 April 2020. source: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Cameroon
-mu:
+#### mu:
 - according to this article, average death rate of covid is 10%. This number is overrated for Africa. Source: https://ourworldindata.org/mortality-risk-covid#:~:text=Case%20fatality%20rate%20of%20COVID%2D19%20compared%20to%20other%20diseases,-How%20does%20the&text=The%20CFR%20of%20SARS%2DCoV,%25%20and%2034%25%2C%20respectively.
-alpha:
+#### alpha:
 - 90% are alive in average (according to taken mu)
 So let's take such parameters
  `b 0 2`
