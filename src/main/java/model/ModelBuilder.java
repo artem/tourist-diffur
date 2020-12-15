@@ -19,15 +19,15 @@ public class ModelBuilder {
     private int betaPosition = 0;
     private int muPosition = 0;
 
-    private final double DELTA;
+    private final double DELTA = 1;
     private int totalDays = 365;
-    private long peopleAmount = 10;
+    private long peopleAmount;
 
 
     // for alpha beta mu dynamic changing
     public static class ParameterPair implements Comparable<ParameterPair> {
-        private long time;
-        private double value;
+        private final long time;
+        private final double value;
 
         public ParameterPair(long time, double value) {
             this.time = time;
@@ -42,14 +42,6 @@ public class ModelBuilder {
             return value;
         }
 
-        public void setTime(long time) {
-            this.time = time;
-        }
-
-        public void setValue(double value) {
-            this.value = value;
-        }
-
         @Override
         public int compareTo(ParameterPair parameterPair) {
             return (time > parameterPair.getTime() ? 1 : -1);
@@ -62,10 +54,6 @@ public class ModelBuilder {
         this.alphaList = List.of();
         this.betaList = List.of();
         this.muList = List.of();
-        // We don't actually care about dynamic delta
-        // Plotter scales the data according to the windows size
-        // Settle with 1 since 0.5 introduces jitter
-        this.DELTA = 1;
     }
 
     // Set and sort by time
