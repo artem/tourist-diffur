@@ -1,6 +1,6 @@
 # Kermack-McKendrick (SIRD) model visualisator
 ## Definitions
-###Variables
+### Variables
 - **S** - the number of **s**usceptible individuals
 - **I** - the number of **i**nfectious individuals
 - **R** - the number of **r**ecovered (and immune) individuals
