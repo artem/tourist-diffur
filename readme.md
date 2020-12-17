@@ -5,10 +5,16 @@
 - **I** - the number of **i**nfectious individuals
 - **R** - the number of **r**ecovered (and immune) individuals
 - **D** - the number of **d**eceased individuals
+- **N** - the total number of individuals
 ### Parameters
 - **alpha** (**a**) - is the average number of recovered individuals per time or **rate of recovery**
 - **beta** (**b**) - is the average number of contacts per person per time or **rate of infection**
 - **mu** (**m**) - is the average number of deceased individuals per time or **rate of mortality**
+### Model
+- **S'** = -beta * I * S / N
+- **I'** = beta * I * S / N  - alpha * I - mu * I
+- **R'** =  alpha * I
+- **D'** = mu * I
 ## Example
 - the total number of individuals is **70000**
 - parameter **alpha** equals **0.8** till 15th day, then it equals **0.9**. In real life it means that doctors have learnt
